@@ -1,0 +1,56 @@
+<style>
+.toc-sidebar nav#TableOfContents a.toc-active {
+    color: #d93025 !important;
+    font-weight: 600;
+}
+</style>
+<script>
+(function () {
+  var links = document.querySelectorAll('.toc-sidebar nav#TableOfContents a[href^="#"]');
+  if (!links.length) return;
+
+  var items = [];
+  links.forEach(function (a) {
+    var el = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+    if (el) items.push({ a: a, el: el });
+  });
+  if (!items.length) return;
+
+  // px from viewport top at which a heading counts as "current" (just below the pinned header)
+  function offset() { return (document.querySelector('header.site-header') || { offsetHeight: 0 }).offsetHeight + 40; }
+  var current = null;
+
+  function update() {
+    var active = null;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].el.getBoundingClientRect().top <= offset()) active = items[i];
+      else break;
+    }
+    // at the very bottom, highlight the last section even if its heading never reaches the offset
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+      active = items[items.length - 1];
+    }
+    if (active === current) return;
+    if (current) current.a.classList.remove('toc-active');
+    if (active) {
+      active.a.classList.add('toc-active');
+      var side = active.a.closest('.toc-sidebar');
+      if (side && side.scrollHeight > side.clientHeight) {
+        var r = active.a.getBoundingClientRect(), s = side.getBoundingClientRect();
+        if (r.top < s.top || r.bottom > s.bottom) active.a.scrollIntoView({ block: 'nearest' });
+      }
+    }
+    current = active;
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { ticking = false; update(); });
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update); // images shift heading positions
+  update();
+})();
+</script>

@@ -1,0 +1,33 @@
+{{- /* Usage: {{< tabs >}}{{< tab title="..." src="images/x.png" >}}...{{< /tabs >}} */ -}}
+{{- $id := printf "tabs-%d" .Ordinal -}}
+<div class="tabs" id="{{ $id }}">
+  <div class="tabs-bar" role="tablist"></div>
+  {{ .Inner }}
+</div>
+<style>
+.tabs-bar{display:flex;gap:4px;border-bottom:1px solid var(--border);margin:1em 0 0}
+.tabs-btn{padding:6px 14px;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--code-bg);color:var(--secondary);cursor:pointer;font:inherit}
+.tabs-btn.active{background:var(--entry);color:var(--primary);font-weight:600}
+.tabs-panel{display:none;padding:12px 0}
+.tabs-panel.active{display:block}
+.tabs-panel img,.tabs-panel iframe{display:block;max-width:100%;width:100%;border:0;margin-top:8px}
+</style>
+<script>
+(function(){
+  var root=document.getElementById("{{ $id }}"),bar=root.querySelector(".tabs-bar"),
+      panels=root.querySelectorAll(".tabs-panel");
+  function show(i){
+    bar.querySelectorAll(".tabs-btn").forEach(function(b,j){b.classList.toggle("active",i===j)});
+    panels.forEach(function(p,j){p.classList.toggle("active",i===j)});
+    var f=panels[i].querySelector("iframe[data-src]");
+    if(f){f.src=f.dataset.src;f.removeAttribute("data-src");}
+  }
+  panels.forEach(function(p,i){
+    var b=document.createElement("button");
+    b.type="button";b.className="tabs-btn";b.textContent=p.dataset.title;
+    b.setAttribute("role","tab");b.addEventListener("click",function(){show(i)});
+    bar.appendChild(b);
+  });
+  show(0);
+})();
+</script>

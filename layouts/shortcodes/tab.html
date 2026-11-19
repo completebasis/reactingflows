@@ -1,0 +1,16 @@
+{{- /* Child of "tabs". Params: title, src (optional: page resource or URL), height (iframe), alt. Inner markdown is shown above the media. */ -}}
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default (.Get "title") -}}
+{{- $height := .Get "height" | default "600" -}}
+{{- $res := "" -}}
+{{- if $src }}{{ $res = .Page.Resources.GetMatch $src }}{{ end -}}
+{{- $media := "" -}}
+{{- if and $res (eq $res.MediaType.MainType "image") -}}
+  {{- $media = printf `<img src="%s" alt="%s" loading="lazy">` $res.RelPermalink $alt -}}
+{{- else if $res -}}
+  {{- $media = printf `<iframe src="%s" height="%s" loading="lazy"></iframe>` $res.RelPermalink $height -}}
+{{- else if $src -}}
+  {{- $media = printf `<iframe data-src="%s" height="%s"></iframe>` $src $height -}}
+{{- end -}}
+{{- $text := trim .Inner " \n\r\t" | markdownify -}}
+<div class="tabs-panel" data-title="{{ .Get "title" }}">{{ $text }}{{ $media | safeHTML }}</div>

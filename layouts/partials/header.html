@@ -83,3 +83,14 @@
         </ul>
     </nav>
 </header>
+
+<script>
+// Expose the sticky header's height so the TOC and anchor jumps can sit below it
+(function () {
+  var h = document.querySelector('header.site-header');
+  function set() { document.documentElement.style.setProperty('--header-h', h.offsetHeight + 'px'); }
+  set();
+  window.addEventListener('resize', set);
+  window.addEventListener('load', set);
+})();
+</script>

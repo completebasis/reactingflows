@@ -1,0 +1,6 @@
+{{- /* Usage: {{< note >}}raw text / code, shown verbatim{{< /note >}}
+       optional: {{< note title="system/setFieldsDict" >}}   (styles: .note-code in assets/css/extended/site.css) */ -}}
+<div class="note-code">
+  {{- with .Get "title" }}<div class="note-code-title">{{ . }}</div>{{ end -}}
+  <pre><code>{{ .Inner | strings.TrimSpace | htmlEscape }}</code></pre>
+</div>

@@ -56,8 +56,8 @@ main a:not(.nav-link):not([class*="button"]):hover {
     flex-shrink: 0;
     width: 240px;
     position: sticky;
-    top: 20px;
-    max-height: calc(100vh - 40px);
+    top: calc(var(--header-h, 0px) + 20px);
+    max-height: calc(100vh - var(--header-h, 0px) - 40px);
     overflow-y: auto;
     font-size: 0.9em;
     border-left: 1px solid #e5e5e5;

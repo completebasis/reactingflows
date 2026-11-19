@@ -5,6 +5,10 @@ theme: PaperMod #ananke
 title: "Исследование реагирующих газовых потоков"
 
 params:
+    author:
+        name: ""
+        email: ""
+
     mainSections:
         - about
     assets:

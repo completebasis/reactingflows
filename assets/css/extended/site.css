@@ -5,7 +5,7 @@ body {
 
 /* Wide content column, consistent across all page templates (including the homepage) */
 :root {
-    --main-width: min(90vw, 1400px);
+    --main-width: min(98vw, 1820px);   /* was min(90vw, 1400px): +30% (capped by the viewport) */
     --nav-width: min(90vw, 1400px);
 }
 
@@ -33,6 +33,15 @@ header.site-header {
     background-position: center;
     background-repeat: no-repeat;
     padding: 20px var(--header-padding-right) 20px var(--header-padding-left);
+    /* Pinned to the top of the viewport */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Anchor jumps (e.g. from the contents panel) should not hide headings under the pinned header */
+html {
+    scroll-padding-top: calc(var(--header-h, 0px) + 10px);
 }
 
 header.site-header nav a {
@@ -113,4 +122,52 @@ header.site-header .nav-item.nav-push-right .nav-dropdown {
 }
 body {
     top: 0 !important;
+}
+
+/* Collapsible blocks (<details><summary>): summary looks like a link — red, dotted underline */
+details > summary {
+    display: inline-block;
+    cursor: pointer;
+    color: #e5484d;
+    border-bottom: 1px dotted currentColor;
+}
+
+details > summary:hover {
+    border-bottom-style: solid;
+}
+
+/* {{< note >}} shortcode: verbatim code / text box */
+.note-code {
+    margin: 1em 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--code-bg);
+    overflow: hidden;
+}
+
+.note-code-title {
+    padding: 4px 12px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.note-code pre {
+    margin: 0;
+    padding: 12px;
+    overflow: auto;
+    max-height: 520px;
+    background: transparent;
+}
+
+.note-code code {
+    display: block;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--primary);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre;
 }
